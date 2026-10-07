@@ -46,6 +46,7 @@ composer.lock
 /.env-app.*.local
 phpunit.xml
 .phpunit.result.cache
+CLAUDE.md
 /.behat-secrets.yml
 *~
 bin/*

@@ -1,0 +1,50 @@
+{% block _app_split_delivery_fields_widget %}
+    {% if form.app_split_delivery is defined %}
+        {% set splitDeliveryForm = form.app_split_delivery %}
+        <div class="split-delivery"
+             data-page-component-view="{{ {
+                 view: 'appsplitdelivery/js/app/views/split-delivery-view'
+             }|json_encode }}">
+            {{ form_row(splitDeliveryForm.enabled, {
+                attr: {'data-role': 'split-delivery-toggle'}
+            }) }}
+            {{ form_widget(splitDeliveryForm.rendered) }}
+
+            <div data-role="split-delivery-items">
+                <table class="split-delivery__table">
+                    <thead>
+                        <tr>
+                            <th class="split-delivery__cell">{{ 'oro.product.entity_label'|trans }}</th>
+                            <th class="split-delivery__cell">{{ 'oro.checkout.checkoutlineitem.quantity.label'|trans }}</th>
+                            <th class="split-delivery__cell split-delivery__cell--address">
+                                {{ 'app.split_delivery.form.ship_to.label'|trans }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for itemForm in splitDeliveryForm.items %}
+                            {% set lineItem = itemForm.vars.line_item %}
+                            <tr>
+                                <td class="split-delivery__cell">
+                                    <div>{{ lineItem.product ? lineItem.product.names|localized_value : lineItem.freeFormProduct }}</div>
+                                    <div class="split-delivery__sku">{{ lineItem.productSku }}</div>
+                                </td>
+                                <td class="split-delivery__cell">
+                                    {{ lineItem.quantity|oro_format_short_product_unit_value(lineItem.productUnit) }}
+                                </td>
+                                <td class="split-delivery__cell split-delivery__cell--address">
+                                    {{ form_widget(itemForm, {
+                                        attr: {
+                                            'aria-label': 'app.split_delivery.form.ship_to.label'|trans
+                                        }
+                                    }) }}
+                                    {{ form_errors(itemForm) }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

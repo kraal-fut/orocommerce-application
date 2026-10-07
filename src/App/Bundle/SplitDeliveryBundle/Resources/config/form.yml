@@ -1,0 +1,18 @@
+services:
+    app_split_delivery.form.type.split_delivery:
+        class: App\Bundle\SplitDeliveryBundle\Form\Type\SplitDeliveryType
+        tags:
+            - { name: form.type }
+
+    app_split_delivery.form.type.line_item_ship_address:
+        class: App\Bundle\SplitDeliveryBundle\Form\Type\LineItemShipAddressType
+        tags:
+            - { name: form.type }
+
+    app_split_delivery.form.extension.transition:
+        class: App\Bundle\SplitDeliveryBundle\Form\Extension\SplitDeliveryTransitionTypeExtension
+        arguments:
+            - '@app_split_delivery.provider.config'
+            - '@app_split_delivery.provider.ship_address'
+        tags:
+            - { name: form.type_extension }

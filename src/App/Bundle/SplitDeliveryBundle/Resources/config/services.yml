@@ -1,0 +1,76 @@
+services:
+    app_split_delivery.provider.config:
+        class: App\Bundle\SplitDeliveryBundle\Provider\SplitDeliveryConfigProvider
+        arguments:
+            - '@oro_checkout.provider.multi_shipping_config'
+
+    app_split_delivery.provider.ship_address:
+        class: App\Bundle\SplitDeliveryBundle\Provider\ShipAddressProvider
+        arguments:
+            - '@oro_order.manager.order_address'
+            - '@oro_locale.formatter.address'
+            - '@translator'
+        tags:
+            - { name: kernel.reset, method: reset }
+
+    app_split_delivery.factory.checkout_factory:
+        class: App\Bundle\SplitDeliveryBundle\Factory\SplitDeliveryCheckoutFactory
+        decorates: oro_checkout.factory.multi_shipping.checkout_factory
+        arguments:
+            - '@.inner'
+            - '@app_split_delivery.provider.config'
+            - '@app_split_delivery.provider.ship_address'
+
+    app_split_delivery.data_provider.checkout:
+        class: App\Bundle\SplitDeliveryBundle\DataProvider\SplitDeliveryCheckoutDataProvider
+        decorates: oro_checkout.data_provider.checkout
+        arguments:
+            - '@.inner'
+            - '@app_split_delivery.provider.config'
+            - '@app_split_delivery.provider.ship_address'
+        tags:
+            - { name: kernel.reset, method: reset }
+
+    app_split_delivery.provider.line_item_group_title:
+        class: App\Bundle\SplitDeliveryBundle\Provider\SplitDeliveryLineItemGroupTitleProvider
+        decorates: oro_checkout.provider.multi_shipping.line_item_group_title
+        arguments:
+            - '@.inner'
+            - '@app_split_delivery.provider.ship_address'
+            - '@translator'
+
+    app_split_delivery.model.checkout_manipulator:
+        class: App\Bundle\SplitDeliveryBundle\Model\SplitDeliveryCheckoutManipulator
+        decorates: oro_checkout.checkout_by_source_criteria_manipulator
+        arguments:
+            - '@.inner'
+
+    app_split_delivery.event_listener.regroup_line_items:
+        class: App\Bundle\SplitDeliveryBundle\EventListener\RegroupLineItemsListener
+        arguments:
+            - '@app_split_delivery.provider.config'
+            - '@app_split_delivery.provider.ship_address'
+            - '@oro_checkout.provider.grouped_line_items'
+        tags:
+            - { name: kernel.event_listener, event: oro_workflow.transition, method: onTransition }
+
+    app_split_delivery.event_listener.datagrid.order_line_items_ship_to:
+        class: App\Bundle\SplitDeliveryBundle\EventListener\Datagrid\OrderLineItemsShipToListener
+        arguments:
+            - '@doctrine'
+            - '@app_split_delivery.provider.ship_address'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.order-line-items-grid, method: onBuildBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.after.order-line-items-grid, method: onResultAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.order-line-items-grid-frontend, method: onBuildBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.after.order-line-items-grid-frontend, method: onResultAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.order-line-items-grid-frontend-print, method: onBuildBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.after.order-line-items-grid-frontend-print, method: onResultAfter }
+
+    app_split_delivery.twig.split_delivery:
+        class: App\Bundle\SplitDeliveryBundle\Twig\SplitDeliveryExtension
+        arguments:
+            - '@oro_platform.twig.service_locator'
+        tags:
+            - { name: twig.extension }
+            - { name: container.service_subscriber, id: app_split_delivery.provider.ship_address, key: App\Bundle\SplitDeliveryBundle\Provider\ShipAddressProvider }

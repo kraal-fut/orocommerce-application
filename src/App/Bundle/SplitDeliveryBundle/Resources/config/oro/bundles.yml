@@ -1,0 +1,2 @@
+bundles:
+    - { name: App\Bundle\SplitDeliveryBundle\AppSplitDeliveryBundle, priority: 300 }

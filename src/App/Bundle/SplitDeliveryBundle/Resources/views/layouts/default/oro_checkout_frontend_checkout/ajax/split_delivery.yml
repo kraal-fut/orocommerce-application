@@ -1,0 +1,15 @@
+layout:
+    actions:
+        - '@setBlockTheme':
+            themes: '@AppSplitDelivery/layouts/default/oro_checkout_frontend_checkout/templates/split_delivery.html.twig'
+        - '@add':
+            id: app_split_delivery_fields
+            parentId: checkout_form
+            siblingId: checkout_form_fields
+            blockType: checkout_form_fields
+            options:
+                checkout: '=data["checkout"]'
+                form: '=data["oro_checkout_transition_form"].getTransitionFormView(data["workflowItem"])'
+                workflowItem: '=data["workflowItem"]'
+
+    conditions: 'context["workflowStepName"]=="enter_shipping_address"'

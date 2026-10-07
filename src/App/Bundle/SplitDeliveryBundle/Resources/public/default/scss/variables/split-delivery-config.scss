@@ -1,0 +1,7 @@
+/* @theme: default; */
+
+$split-delivery-offset-top: spacing('lg') !default;
+$split-delivery-table-offset-top: spacing('base') !default;
+$split-delivery-cell-padding: spacing('sm') spacing('xs') !default;
+$split-delivery-cell-border: 1px solid get-color('neutral', 'grey1') !default;
+$split-delivery-sku-color: get-color('text', 'secondary') !default;

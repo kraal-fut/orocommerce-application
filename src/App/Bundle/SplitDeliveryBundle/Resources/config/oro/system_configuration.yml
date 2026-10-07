@@ -1,0 +1,7 @@
+system_configuration:
+    fields:
+        oro_checkout.group_line_items_by:
+            options:
+                choices:
+                    oro.checkout.checkoutlineitem.entity_label:
+                        app.split_delivery.group_by.shipping_address.label: app_ship_address_key

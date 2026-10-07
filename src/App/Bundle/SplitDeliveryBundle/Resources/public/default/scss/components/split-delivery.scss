@@ -1,0 +1,26 @@
+/* @theme: default; */
+
+.split-delivery {
+    margin-block-start: $split-delivery-offset-top;
+
+    &__table {
+        width: 100%;
+        margin-block-start: $split-delivery-table-offset-top;
+        border-collapse: collapse;
+    }
+
+    &__cell {
+        padding: $split-delivery-cell-padding;
+        text-align: start;
+        vertical-align: middle;
+        border-block-end: $split-delivery-cell-border;
+
+        &--address {
+            width: 50%;
+        }
+    }
+
+    &__sku {
+        color: $split-delivery-sku-color;
+    }
+}

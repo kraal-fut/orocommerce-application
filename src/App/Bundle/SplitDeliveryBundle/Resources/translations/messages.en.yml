@@ -1,0 +1,21 @@
+app:
+    split_delivery:
+        group_by:
+            shipping_address.label: 'Shipping Address'
+        checkoutlineitem:
+            ship_address_key:
+                label: 'Ship To Address Key'
+                description: Address book identifier of the shipping address the line item is shipped to. Empty means the checkout shipping address.
+        orderlineitem:
+            shipping_address:
+                label: 'Ship To Address'
+                description: The shipping address the line item is shipped to. Empty means the order shipping address.
+        line_item_group:
+            ship_to.title: 'Ship to: %address%'
+            main_address.title: 'Ship to the main shipping address'
+        form:
+            enabled.label: 'Ship items to multiple addresses'
+            ship_to.label: 'Ship To'
+            main_address.label: 'Main shipping address'
+        datagrid:
+            ship_to.label: 'Ship To'
